@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import  './Home.css';
+import './Home.css';
 import Header from '../../common/header/Header';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import moviesData from '../../assets/movieData';
 import genres from '../../assets/genres';
 import artists from '../../assets/artists';
@@ -13,6 +13,7 @@ import CardContent from '@material-ui/core/CardContent';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -51,8 +52,17 @@ const styles = theme => ({
 });
 
 
+class Home extends Component {
+    movieNameChangeHandler = event => {
+        this.setState({movieName: event.target.value});
+    }
+    genreSelectHandler = event => {
+        this.setState({genres: event.target.value});
+    }
+    artistSelectHandler = (event) => {
+        this.setState({artists: event.target.value})
+    }
 
-class Home extends Component{
     constructor() {
         super();
         this.state = {
@@ -62,28 +72,19 @@ class Home extends Component{
         }
     }
 
-    movieNameChangeHandler = event => {
-        this.setState({ movieName: event.target.value });
-    }
-    genreSelectHandler = event => {
-        this.setState({ genres: event.target.value });
-    }
-    artistSelectHandler = (event) => {
-        this.setState( {artists : event.target.value})
-    }
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <div>
                 <Header/>
                 <div className={classes.upcomingMoviesHeading}>
                     <span>Upcoming Movies</span>
                 </div>
-                <GridList cols={5} className={classes.gridListUpcomingMovies} >
+                <GridList cols={5} className={classes.gridListUpcomingMovies}>
                     {moviesData.map(movie => (
                         <GridListTile key={movie.id}>
-                            <img src={movie.poster_url} className="movie-poster"  alt={movie.title} />
-                            <GridListTileBar title={movie.title} />
+                            <img src={movie.poster_url} className="movie-poster" alt={movie.title}/>
+                            <GridListTileBar title={movie.title}/>
                         </GridListTile>
                     ))}
                 </GridList>
@@ -91,12 +92,13 @@ class Home extends Component{
                     <div className="left">
                         <GridList cellHeight={350} cols={3} className={classes.gridListMain}>
                             {moviesData.map(movie => (
-                            <GridListTile key={movie.id}>
-                                <img src={movie.poster_url} alt={movie.title} className="movie-poster"/>
-                                <GridListTileBar title={movie.title}
-                                                 subtitle={<span>Release Date: {new Date(movie.release_date).toDateString()}</span>}
-                                />
-                            </GridListTile>
+                                <GridListTile key={movie.id}>
+                                    <img src={movie.poster_url} alt={movie.title} className="movie-poster"/>
+                                    <GridListTileBar title={movie.title}
+                                                     subtitle={
+                                                         <span>Release Date: {new Date(movie.release_date).toDateString()}</span>}
+                                    />
+                                </GridListTile>
                             ))}
                         </GridList>
                     </div>
@@ -110,13 +112,13 @@ class Home extends Component{
                                 </FormControl>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                                    <Input id="movieName" onChange={this.movieNameChangeHandler} />
+                                    <Input id="movieName" onChange={this.movieNameChangeHandler}/>
                                 </FormControl>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel htmlFor="select-multiple-checkbox">Genres</InputLabel>
                                     <Select
                                         multiple
-                                        input={<Input id="select-multiple-checkbox-genre" />}
+                                        input={<Input id="select-multiple-checkbox-genre"/>}
                                         renderValue={selected => selected.join(',')}
                                         value={this.state.genres}
                                         onChange={this.genreSelectHandler}
@@ -124,8 +126,8 @@ class Home extends Component{
                                         <MenuItem value="0">None</MenuItem>
                                         {genres.map(genre => (
                                             <MenuItem key={genre.id} value={genre.name}>
-                                                <Checkbox checked={this.state.genres.indexOf(genre.name) > -1} />
-                                                <ListItemText primary={genre.name} />
+                                                <Checkbox checked={this.state.genres.indexOf(genre.name) > -1}/>
+                                                <ListItemText primary={genre.name}/>
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -134,23 +136,34 @@ class Home extends Component{
                                     <InputLabel htmlFor="select-multiple-checkbox">Artists</InputLabel>
                                     <Select
                                         multiple
-                                        input={<Input id="select-multiple-checkbox" />}
+                                        input={<Input id="select-multiple-checkbox"/>}
                                         renderValue={selected => selected.join(',')}
                                         value={this.state.artists}
                                         onChange={this.artistSelectHandler}
                                     >
 
-                                    <MenuItem value="0">None</MenuItem>
-                                    {
-                                        artists.map( artist => (
-                                            <MenuItem key={artist.id} value={artist.first_name +" " + artist.last_name}>
-                                                <Checkbox checked={this.state.artists.indexOf(artist.first_name +" " + artist.last_name) > -1} />
-                                                <ListItemText primary={artist.first_name +" " + artist.last_name} />
-                                            </MenuItem>
+                                        <MenuItem value="0">None</MenuItem>
+                                        {
+                                            artists.map(artist => (
+                                                    <MenuItem key={artist.id}
+                                                              value={artist.first_name + " " + artist.last_name}>
+                                                        <Checkbox
+                                                            checked={this.state.artists.indexOf(artist.first_name + " " + artist.last_name) > -1}/>
+                                                        <ListItemText primary={artist.first_name + " " + artist.last_name}/>
+                                                    </MenuItem>
+                                                )
                                             )
-                                        )
-                                    }
+                                        }
                                     </Select>
+                                </FormControl>
+                                <FormControl className={classes.formControl}>
+                                    <TextField
+                                        id="releaseDateStart"
+                                        label="Release Date Start"
+                                        type="date"
+                                        defaultValue=""
+                                        InputLabelProps={{ shrink: true }}
+                                    />
                                 </FormControl>
                             </CardContent>
                         </Card>
