@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import './Home.css';
 import Header from '../../common/header/Header';
-import Details from '../../screens/details/Details'
 import {withStyles} from '@material-ui/core/styles';
 import moviesData from '../../assets/movieData';
 import genres from '../../assets/genres';
@@ -56,6 +54,7 @@ const styles = theme => ({
 
 
 class Home extends Component {
+
     movieNameChangeHandler = event => {
         this.setState({movieName: event.target.value});
     }
@@ -66,7 +65,7 @@ class Home extends Component {
         this.setState({artists: event.target.value})
     }
     movieClickHandler = (movieId) => {
-        ReactDOM.render(<Details movieId={movieId} />, document.getElementById('root'));
+        this.props.history.push('/movie/' + movieId);
     }
 
     constructor() {

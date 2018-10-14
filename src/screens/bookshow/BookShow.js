@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Header from '../../common/header/Header';
-import Confirmation from '../confirmation/Confirmation';
 import Typography from '@material-ui/core/Typography';
 import './BookShow.css';
-import Home from '../home/Home';
 import language from '../../assets/language';
 import location from '../../assets/location';
 import showDate from '../../assets/showDate';
@@ -18,7 +15,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
-
+import { Link } from 'react-router-dom';
 class BookShow extends Component {
 
     constructor() {
@@ -44,12 +41,12 @@ class BookShow extends Component {
         this.state.showDate === "" ? this.setState({ reqShowDate: "dispBlock" }) : this.setState({ reqShowDate: "dispNone" });
         this.state.showTime === "" ? this.setState({ reqShowTime: "dispBlock" }) : this.setState({ reqShowTime: "dispNone" });
         this.state.tickets === 0 ? this.setState({ reqTickets: "dispBlock" }) : this.setState({ reqTickets: "dispNone" });
-
-        ReactDOM.render(<Confirmation bookingSummary={this.state} />, document.getElementById('root'));
-    }
-
-    backToDetailsHandler = () => {
-        ReactDOM.render(<Home />, document.getElementById('root'));
+        if ((this.state.location === "") || (this.state.language === "") || (this.state.showTime === "")
+            || (this.state.showDate === "") || (this.state.tickets === 0)) { return; }
+        this.props.history.push({
+            pathname: '/confirm/' + this.props.match.params.id,
+            bookingSummary: this.state
+        })
     }
 
     locationChangeHandler = event => {
@@ -64,7 +61,7 @@ class BookShow extends Component {
     showTimeChangeHandler = event => {
         this.setState({ showTime: event.target.value });
     }
-    ticketsChangeHandler = (event) => {
+    ticketsChangeHandler = event => {
         this.setState({ tickets: event.target.value })
     }
     render() {
@@ -72,8 +69,8 @@ class BookShow extends Component {
             <div>
                 <Header />
                 <div className="bookShow">
-                    <Typography className="back" onClick={this.backToDetailsHandler}>
-                        &#60; Back to Movie Details
+                    <Typography className="back">
+                        <Link to={"/movie/" + this.props.match.params.id}>&#60; Back to Movie Details</Link>
                     </Typography>
 
                     <Card className="cardStyle">

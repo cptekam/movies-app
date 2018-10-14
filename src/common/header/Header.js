@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './Header.css';
 import Button from '@material-ui/core/Button';
 import logo from '../../assets/logo.svg';
@@ -12,7 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import PropTypes from 'prop-types';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import BookShow from '../../screens/bookshow/BookShow';
+import { Link } from 'react-router-dom';
 const customStyles = {
     content: {
         top: '50%',
@@ -59,10 +58,7 @@ class Header extends Component {
         }
     }
 
-    bookShowHandler = (e) => {
-        ReactDOM.render(<BookShow />, document.getElementById('root'));
-    }
-    openModalHandler = () => {
+     openModalHandler = () => {
         this.setState({
             modalIsOpen: true,
             value: 0,
@@ -144,9 +140,11 @@ class Header extends Component {
                     </div>
                     {this.props.showBookShowButton === "true" ?
                         <div className="bookshow-button">
-                            <Button variant="contained" color="primary" onClick={this.bookShowHandler}>
-                                Book Show
-                            </Button>
+                            <Link to={"/bookshow/" + this.props.id}>
+                                <Button variant="contained" color="primary">
+                                    Book Show
+                                 </Button>
+                            </Link>
                         </div>
                         : ""}
                 </header>
