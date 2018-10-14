@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../../common/header/Header';
+import Confirmation from '../confirmation/Confirmation';
 import Typography from '@material-ui/core/Typography';
 import './BookShow.css';
 import Home from '../home/Home';
@@ -43,7 +44,10 @@ class BookShow extends Component {
         this.state.showDate === "" ? this.setState({ reqShowDate: "dispBlock" }) : this.setState({ reqShowDate: "dispNone" });
         this.state.showTime === "" ? this.setState({ reqShowTime: "dispBlock" }) : this.setState({ reqShowTime: "dispNone" });
         this.state.tickets === 0 ? this.setState({ reqTickets: "dispBlock" }) : this.setState({ reqTickets: "dispNone" });
+
+        ReactDOM.render(<Confirmation bookingSummary={this.state} />, document.getElementById('root'));
     }
+
     backToDetailsHandler = () => {
         ReactDOM.render(<Home />, document.getElementById('root'));
     }
