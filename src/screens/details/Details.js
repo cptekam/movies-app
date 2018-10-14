@@ -1,11 +1,14 @@
 import React , {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Typography from '@material-ui/core/Typography';
+import GridList from '@material-ui/core/GridList';
 import './Details.css';
 import Header from '../../common/header/Header';
 import moviesData from '../../assets/movieData';
 import Home from '../home/Home';
 import YouTube from 'react-youtube';
+import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
 class Details extends Component{
     constructor() {
         super();
@@ -23,8 +26,11 @@ class Details extends Component{
             return mov.id === this.props.movieId
         })[0];
         this.setState({ currentState });
-        console.log(this.state);
+        //console.log(this.state);
     }
+    artistClickHandler = (wikiUrl) => {
+        window.location = wikiUrl;
+}
     render (){
         let movie = this.state.movie;
         const opts = {
@@ -79,6 +85,20 @@ class Details extends Component{
                         </div>
                     </div>
                     <div className="rightDetails">
+                        <div  className="bold marginBottom16 marginTop16">
+                            <Typography><span className="bold"> Artists:</span></Typography>
+                        </div>
+                        <div className="paddingRight">
+                            <GridList cols={2} cellHeight={160} >
+                                { movie.artists != null && movie.artists.map( artist => (
+                                    <GridListTile  className="gridTile" key={artist.id} onClick = {() => this.artistClickHandler(artist.wiki_url)}>
+                                        <img src={artist.profile_url}
+                                             alt={artist.first_name + " " + artist.first_name}/>
+                                        <GridListTileBar title={artist.first_name + " " + artist.first_name}/>
+                                    </GridListTile>
+                                ) )}
+                            </GridList>
+                        </div>
                     </div>
                 </div>
             </div>
