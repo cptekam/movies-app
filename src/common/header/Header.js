@@ -54,7 +54,8 @@ class Header extends Component {
             registerPasswordRequired: "dispNone",
             registerPassword: "",
             contactRequired: "dispNone",
-            contact: ""
+            contact: "",
+            registrationSuccess: false
         }
     }
 
@@ -75,7 +76,9 @@ class Header extends Component {
             registerPasswordRequired: "dispNone",
             registerPassword: "",
             contactRequired: "dispNone",
-            contact: ""
+            contact: "",
+            registrationSuccess : false
+
         });
     }
 
@@ -106,6 +109,28 @@ class Header extends Component {
         this.state.email === "" ? this.setState({ emailRequired: "dispBlock" }) : this.setState({ emailRequired: "dispNone" });
         this.state.registerPassword === "" ? this.setState({ registerPasswordRequired: "dispBlock" }) : this.setState({ registerPasswordRequired: "dispNone" });
         this.state.contact === "" ? this.setState({ contactRequired: "dispBlock" }) : this.setState({ contactRequired: "dispNone" });
+
+        let rigDetail = {
+            "email_address": this.state.email,
+            "first_name": this.state.firstname,
+            "last_name":this.state.lastname,
+            "mobile_number": this.state.contact,
+            "password": this.state.registerPassword
+        }
+        let  xhrSignUp = new XMLHttpRequest();
+        let that = this;
+        xhrSignUp.addEventListener("readystatechange" , function () {
+
+            if (this.readyState === 4){
+                console.log(this.responseText);
+                if(JSON.parse(this.responseText).status === "ACTIVE")
+                that.setState({registrationSuccess : true})
+            }
+        })
+        xhrSignUp.open("POST", this.props.baseUrl + "signup");
+        xhrSignUp.setRequestHeader("Content-Type", "application/json");
+        xhrSignUp.setRequestHeader("Cache-Control", "no-cache");
+        xhrSignUp.send(JSON.stringify(rigDetail));
     }
 
     inputFirstNameChangeHandler = (e) => {
@@ -223,6 +248,14 @@ class Header extends Component {
                                 <span className="red">required</span>
                             </FormHelperText>
                         </FormControl>
+                        <br /><br />
+                        {this.state.registrationSuccess === true &&
+                        <FormControl>
+                                    <span className="successText">
+                                        Registration Successful. Please Login!
+                                      </span>
+                        </FormControl>
+                        }
                         <br /><br />
                         <Button variant="contained" color="primary" onClick={this.registerClickHandler}>REGISTER</Button>
                     </TabContainer>
